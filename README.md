@@ -36,6 +36,18 @@ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 - nếu đang đứng ở root
 - sau khi tạo xong sẽ copy key trong public key copy vào file authorized_keys trên server cần ssh đến
 - cặp key private và public ở 2 servre sẽ match với nhau theo profile ở user tạo key để ssh không mật khẩu
+
+##### tạo luồng kết nối từ slave tới gitlab
+- slave cần kết nối tới gitlab để clone, pull code
+- sử dụng credentials Username with password để clone, pull code
+- tạo ssh key và access token trên gitlab để authencation
+      + vào preferen --> SSH Keys --> copy public key --> add key
+      + tạo access token --> mã access token
+- mã access token sẽ dùng cho việc cấu hình credential Username with password với password là mã access token, user là user name của gitlab
+- khi clone pull code từ gitlab sẽ đăng nhập vào bằng user và password credential.
+```
+ withCredentials([usernamePassword(credentialsId: 'https-creds-id', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')])
+```
 ##### Jenkins file 
 - sau khi cấu hình xong jenkins và luồng kết nối sẽ tiến hành viết jenkins file
 - Jenkins file có thể để ở trên git hoặc trong chính các project của jenkins
